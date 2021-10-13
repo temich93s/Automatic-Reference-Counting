@@ -106,3 +106,35 @@ print(john2?.apartment as Any)
 unit4A = nil
 // Prints "Apartment 4A is being deinitialized"
 print(john2?.apartment as Any)
+
+
+//MARK: Бесхозные ссылки
+print("\n//Бесхозные ссылки")
+
+class Customer {
+    let name: String
+    var card: CreditCard?
+    init(name: String) {
+        self.name = name
+    }
+    deinit { print("\(name) is being deinitialized") }
+}
+
+class CreditCard {
+    let number: UInt64
+    unowned let customer: Customer
+    init(number: UInt64, customer: Customer) {
+        self.number = number
+        self.customer = customer
+    }
+    deinit { print("Card #\(number) is being deinitialized") }
+}
+
+var john3: Customer?
+
+john3 = Customer(name: "John Appleseed")
+john3!.card = CreditCard(number: 1234_5678_9012_3456, customer: john3!)
+
+john3 = nil
+// Prints "John Appleseed is being deinitialized"
+// Prints "Card #1234567890123456 is being deinitialized"
