@@ -161,13 +161,16 @@ class Course {
         self.department = department
         self.nextCourse = nil
     }
+    deinit {
+        print("DEINIT: \(name)")
+    }
 }
 
 let department = Department(name: "Horticulture")
 
 var intro = Course(name: "Survey of Plants", in: department)
 var intermediate = Course(name: "Growing Common Herbs", in: department)
-var advanced = Course(name: "Caring for Tropical Plants", in: department)
+var advanced: Course? = Course(name: "Caring for Tropical Plants", in: department)
 var test = Course(name: "111", in: department)
 
 intro.nextCourse = intermediate
@@ -183,7 +186,7 @@ print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n"
 print()
 print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
 print()
-print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print(advanced!.department.name, advanced!.name, advanced!.nextCourse?.name, separator: "\n")
 print()
 
 department.courses.removeLast()
@@ -192,7 +195,7 @@ print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n"
 print()
 print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
 print()
-print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print(advanced!.department.name, advanced!.name, advanced!.nextCourse?.name, separator: "\n")
 print()
 
 for i in department.courses {
@@ -211,7 +214,7 @@ print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n"
 print()
 print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
 print()
-print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print(advanced!.department.name, advanced!.name, advanced!.nextCourse?.name, separator: "\n")
 print()
 
 department.courses[1] = nil
@@ -220,5 +223,10 @@ print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n"
 print()
 print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
 print()
-print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print(advanced!.department.name, advanced!.name, advanced!.nextCourse?.name, separator: "\n")
 print()
+
+advanced = nil
+
+// ERORR в intermediate.nextCours, так как unowned не ставит по умолчанию nil
+//print(intermediate.department.name, intermediate.name, intermediate.nextCourse, separator: "\n")
