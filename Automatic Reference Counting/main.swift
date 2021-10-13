@@ -230,3 +230,33 @@ advanced = nil
 
 // ERORR в intermediate.nextCours, так как unowned не ставит по умолчанию nil
 //print(intermediate.department.name, intermediate.name, intermediate.nextCourse, separator: "\n")
+
+
+//MARK: Бесхозные ссылки и неявно извлеченные опциональные свойства
+print("\n//Бесхозные ссылки и неявно извлеченные опциональные свойства")
+
+class Country {
+    let name: String
+    var capitalCity: City!
+    init(name: String, capitalName: String) {
+        self.name = name
+        print("1:", self.name, self.capitalCity)
+        self.capitalCity = City(name: capitalName, country: self)
+        print("2:", self.name, self.capitalCity.name, self.capitalCity.country)
+    }
+}
+
+class City {
+    let name: String
+    unowned let country: Country
+    init(name: String, country: Country) {
+        self.name = name
+        print("3:", self.name)
+        self.country = country
+        print("4:", self.name, self.country.name, self.country.capitalCity)
+    }
+}
+
+var country = Country(name: "Canada", capitalName: "Ottawa")
+print("\(country.name)'s capital city is called \(country.capitalCity.name)")
+// Prints "Canada's capital city is called Ottawa"
