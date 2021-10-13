@@ -138,3 +138,87 @@ john3!.card = CreditCard(number: 1234_5678_9012_3456, customer: john3!)
 john3 = nil
 // Prints "John Appleseed is being deinitialized"
 // Prints "Card #1234567890123456 is being deinitialized"
+
+
+//MARK: Бесхозные опциональные ссылки
+print("\n//Бесхозные опциональные ссылки")
+
+class Department {
+    var name: String
+    var courses: [Course?]
+    init(name: String) {
+        self.name = name
+        self.courses = []
+    }
+}
+
+class Course {
+    var name: String
+    unowned var department: Department
+    unowned var nextCourse: Course?
+    init(name: String, in department: Department) {
+        self.name = name
+        self.department = department
+        self.nextCourse = nil
+    }
+}
+
+let department = Department(name: "Horticulture")
+
+var intro = Course(name: "Survey of Plants", in: department)
+var intermediate = Course(name: "Growing Common Herbs", in: department)
+var advanced = Course(name: "Caring for Tropical Plants", in: department)
+var test = Course(name: "111", in: department)
+
+intro.nextCourse = intermediate
+intermediate.nextCourse = advanced
+department.courses = [intro, intermediate, advanced]
+
+for i in department.courses {
+    print(i!.name)
+}
+print()
+
+print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n")
+print()
+print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
+print()
+print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print()
+
+department.courses.removeLast()
+
+print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n")
+print()
+print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
+print()
+print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print()
+
+for i in department.courses {
+    print(i!.name)
+}
+print()
+
+department.courses[1] = test
+
+for i in department.courses {
+    print(i!.name)
+}
+print()
+
+print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n")
+print()
+print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
+print()
+print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print()
+
+department.courses[1] = nil
+
+print(intro.department.name, intro.name, intro.nextCourse?.name, separator: "\n")
+print()
+print(intermediate.department.name, intermediate.name, intermediate.nextCourse?.name, separator: "\n")
+print()
+print(advanced.department.name, advanced.name, advanced.nextCourse?.name, separator: "\n")
+print()
