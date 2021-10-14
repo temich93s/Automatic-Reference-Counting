@@ -303,3 +303,39 @@ print(paragraph!.asHTML())
 // Prints "<p>hello, world</p>"
 
 paragraph = nil
+
+
+//MARK: Слабые (weak) или бесхозные (unowned) ссылки
+print("\n//Слабые (weak) или бесхозные (unowned) ссылки")
+
+class HTMLElement1 {
+
+    let name: String
+    let text: String?
+
+    lazy var asHTML: () -> String = {
+        [unowned self] in
+        if let text = self.text {
+            return "<\(self.name)>\(text)</\(self.name)>"
+        } else {
+            return "<\(self.name) />"
+        }
+    }
+
+    init(name: String, text: String? = nil) {
+        self.name = name
+        self.text = text
+    }
+
+    deinit {
+        print("\(name) is being deinitialized")
+    }
+
+}
+
+var paragraph1: HTMLElement1? = HTMLElement1(name: "p", text: "hello, world")
+print(paragraph1!.asHTML())
+// Prints "<p>hello, world</p>
+
+paragraph1 = nil
+// Prints "p is being deinitialized"
